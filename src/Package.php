@@ -37,7 +37,6 @@ class Package {
 	}
 
 	public static function on_init() {
-		add_action( 'init', array( __CLASS__, 'load_plugin_textdomain' ) );
 		add_action( 'init', array( __CLASS__, 'check_version' ), 10 );
 
 		self::includes();
@@ -45,20 +44,6 @@ class Package {
 		if ( self::is_enabled() ) {
 			self::init_hooks();
 		}
-	}
-
-	public static function load_plugin_textdomain() {
-		if ( function_exists( 'determine_locale' ) ) {
-			$locale = determine_locale();
-		} else {
-			// @todo Remove when start supporting WP 5.0 or later.
-			$locale = is_admin() ? get_user_locale() : get_locale();
-		}
-
-		$locale = apply_filters( 'plugin_locale', $locale, 'dhl-for-shiptastic' );
-
-		load_textdomain( 'shiptastic-integration-for-ups', trailingslashit( WP_LANG_DIR ) . 'shiptastic-integration-for-ups/shiptastic-integration-for-ups-' . $locale . '.mo' );
-		load_plugin_textdomain( 'shiptastic-integration-for-ups', false, plugin_basename( self::get_path() ) . '/i18n/languages/' );
 	}
 
 	public static function check_version() {

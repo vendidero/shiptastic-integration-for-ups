@@ -6,7 +6,7 @@
  * Author: vendidero
  * Author URI: https://vendidero.com
  * Version: 1.0.0
- * Requires PHP: 5.6
+ * Requires PHP: 7.0
  * License: GPLv3
  * Requires Plugins: shiptastic-for-woocommerce
  *
@@ -15,7 +15,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-if ( version_compare( PHP_VERSION, '5.6.0', '<' ) ) {
+if ( version_compare( PHP_VERSION, '7.0.0', '<' ) ) {
 	return;
 }
 
