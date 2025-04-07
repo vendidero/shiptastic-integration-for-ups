@@ -8,13 +8,13 @@ Requires PHP: 7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-Connect Shiptastic to the UPS API and create UPS labels to shipments and returns.
+Connect Shiptastic to the UPS® API and create UPS labels to shipments and returns.
 
 == Description ==
 
-This plugin registers UPS as a shipping service provider for [Shiptastic](http://wordpress.org/plugins/shiptastic-for-woocommerce). Navigate to
+This plugin registers UPS® as a shipping service provider for [Shiptastic](http://wordpress.org/plugins/shiptastic-for-woocommerce). Navigate to
 WooCommerce > Settings > Shiptastic > Shipping Service Providers > UPS and connect your store to the UPS API. After that, you may conveniently create
-UPS labels to your shipments right from within your admin panel.
+UPS labels to your shipments right from within your admin panel and allow your customers to choose UPS Access Point™ delivery from within your checkout.
 
 == Installation ==
 

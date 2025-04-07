@@ -552,7 +552,7 @@ class UPS extends Auto {
 	}
 
 	public function get_help_link() {
-		return 'https://vendidero.de/doc/woocommerce-germanized/ups-integration-einrichten';
+		return _x( 'https://vendidero.com/doc/shiptastic/integrate-with-ups', 'help-url', 'shiptastic-integration-for-ups' );
 	}
 
 	public function get_signup_link() {

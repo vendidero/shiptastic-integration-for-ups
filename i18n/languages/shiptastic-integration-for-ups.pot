@@ -2,39 +2,39 @@
 # This file is distributed under the GPLv3.
 msgid ""
 msgstr ""
-"Project-Id-Version: UPS for Shiptastic 1.0.0\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shiptastic-ups\n"
+"Project-Id-Version: Shiptastic integration for UPS 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/shiptastic-integration-for-ups\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-17T10:20:46+00:00\n"
+"POT-Creation-Date: 2025-04-07T10:56:37+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 
 #. Plugin Name of the plugin
-#: shiptastic-ups.php
-msgid "UPS for Shiptastic"
+#: shiptastic-integration-for-ups.php
+msgid "Shiptastic integration for UPS"
 msgstr ""
 
 #. Plugin URI of the plugin
-#: shiptastic-ups.php
+#: shiptastic-integration-for-ups.php
 msgid "https://vendidero.com/doc/shiptastic/ups"
 msgstr ""
 
 #. Description of the plugin
-#: shiptastic-ups.php
+#: shiptastic-integration-for-ups.php
 msgid "UPS integration for Shiptastic"
 msgstr ""
 
 #. Author of the plugin
-#: shiptastic-ups.php
+#: shiptastic-integration-for-ups.php
 msgid "vendidero"
 msgstr ""
 
 #. Author URI of the plugin
-#: shiptastic-ups.php
+#: shiptastic-integration-for-ups.php
 msgid "https://vendidero.com"
 msgstr ""
 
@@ -204,32 +204,32 @@ msgctxt "shiptastic"
 msgid "UPS"
 msgstr ""
 
-#: src/Package.php:85
+#: src/Package.php:70
 msgctxt "ups"
 msgid "UPS Print and Mail (PNM)"
 msgstr ""
 
-#: src/Package.php:86
+#: src/Package.php:71
 msgctxt "ups"
 msgid "UPS Return Service 1-Attempt (RS1)"
 msgstr ""
 
-#: src/Package.php:87
+#: src/Package.php:72
 msgctxt "ups"
 msgid "UPS Return Service 3-Attempt (RS3)"
 msgstr ""
 
-#: src/Package.php:88
+#: src/Package.php:73
 msgctxt "ups"
 msgid "UPS Electronic Return Label (ERL)"
 msgstr ""
 
-#: src/Package.php:89
+#: src/Package.php:74
 msgctxt "ups"
 msgid "UPS Print Return Label (PRL)"
 msgstr ""
 
-#: src/Package.php:90
+#: src/Package.php:75
 msgctxt "ups"
 msgid "UPS Exchange Print Return Label"
 msgstr ""
@@ -244,316 +244,316 @@ msgctxt "ups"
 msgid "E-Mail"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:23
+#: src/ShippingProvider/UPS.php:22
 msgctxt "ups"
 msgid "UPS"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:31
+#: src/ShippingProvider/UPS.php:30
 msgctxt "ups"
 msgid "Create UPS labels and return labels conveniently."
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:84
+#: src/ShippingProvider/UPS.php:83
 msgctxt "ups"
 msgid "Reference 1"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:85
+#: src/ShippingProvider/UPS.php:84
 msgctxt "ups"
 msgid "Return #{shipment_number}, order {order_number}"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:85
+#: src/ShippingProvider/UPS.php:84
 msgctxt "ups"
 msgid "#{shipment_number}, order {order_number}"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:89
+#: src/ShippingProvider/UPS.php:88
 msgctxt "ups"
 msgid "Reference 2"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:100
+#: src/ShippingProvider/UPS.php:99
 msgctxt "ups"
 msgid "Cost and Freight"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:101
+#: src/ShippingProvider/UPS.php:100
 msgctxt "ups"
 msgid "Cost Insurance and Freight"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:102
+#: src/ShippingProvider/UPS.php:101
 msgctxt "ups"
 msgid "Carriage and Insurance Paid"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:103
+#: src/ShippingProvider/UPS.php:102
 msgctxt "ups"
 msgid "Carriage Paid To"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:104
+#: src/ShippingProvider/UPS.php:103
 msgctxt "ups"
 msgid "Delivered at Frontier"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:105
+#: src/ShippingProvider/UPS.php:104
 msgctxt "ups"
 msgid "Delivery Duty Paid"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:106
+#: src/ShippingProvider/UPS.php:105
 msgctxt "ups"
 msgid "Delivery Duty Unpaid"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:107
+#: src/ShippingProvider/UPS.php:106
 msgctxt "ups"
 msgid "Delivered Ex Quay"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:108
+#: src/ShippingProvider/UPS.php:107
 msgctxt "ups"
 msgid "Delivered Ex Ship"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:109
+#: src/ShippingProvider/UPS.php:108
 msgctxt "ups"
 msgid "Ex Works"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:110
+#: src/ShippingProvider/UPS.php:109
 msgctxt "ups"
 msgid "Free Alongside Ship"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:111
+#: src/ShippingProvider/UPS.php:110
 msgctxt "ups"
 msgid "Free Carrier"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:112
+#: src/ShippingProvider/UPS.php:111
 msgctxt "ups"
 msgid "Free On Board"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:129
-#: src/ShippingProvider/UPS.php:527
+#: src/ShippingProvider/UPS.php:128
+#: src/ShippingProvider/UPS.php:526
 msgctxt "ups"
 msgid "Return Service"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:147
+#: src/ShippingProvider/UPS.php:146
 msgctxt "ups"
 msgid "Default Incoterms"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:152
+#: src/ShippingProvider/UPS.php:151
 msgctxt "ups"
 msgid "Please select a default incoterms option."
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:178
+#: src/ShippingProvider/UPS.php:177
 msgctxt "ups"
 msgid "UPS Worldwide Express Freight"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:179
+#: src/ShippingProvider/UPS.php:178
 msgctxt "ups"
 msgid "UPS Worldwide Express Freight Midday"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:180
+#: src/ShippingProvider/UPS.php:179
 msgctxt "ups"
 msgid "UPS Worldwide Economy DDU"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:181
+#: src/ShippingProvider/UPS.php:180
 msgctxt "ups"
 msgid "UPS Worldwide Economy DDP"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:186
-#: src/ShippingProvider/UPS.php:207
-#: src/ShippingProvider/UPS.php:234
-#: src/ShippingProvider/UPS.php:247
-#: src/ShippingProvider/UPS.php:266
+#: src/ShippingProvider/UPS.php:185
+#: src/ShippingProvider/UPS.php:206
+#: src/ShippingProvider/UPS.php:233
+#: src/ShippingProvider/UPS.php:246
+#: src/ShippingProvider/UPS.php:265
 msgctxt "ups"
 msgid "UPS Standard"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:190
-#: src/ShippingProvider/UPS.php:221
+#: src/ShippingProvider/UPS.php:189
+#: src/ShippingProvider/UPS.php:220
 msgctxt "ups"
 msgid "UPS Worldwide Express"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:191
-#: src/ShippingProvider/UPS.php:220
-#: src/ShippingProvider/UPS.php:268
+#: src/ShippingProvider/UPS.php:190
+#: src/ShippingProvider/UPS.php:219
+#: src/ShippingProvider/UPS.php:267
 msgctxt "ups"
 msgid "UPS Worldwide Expedited"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:192
-#: src/ShippingProvider/UPS.php:222
-#: src/ShippingProvider/UPS.php:237
-#: src/ShippingProvider/UPS.php:269
+#: src/ShippingProvider/UPS.php:191
+#: src/ShippingProvider/UPS.php:221
+#: src/ShippingProvider/UPS.php:236
+#: src/ShippingProvider/UPS.php:268
 msgctxt "ups"
 msgid "UPS Worldwide Express Plus"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:193
-#: src/ShippingProvider/UPS.php:238
-#: src/ShippingProvider/UPS.php:270
+#: src/ShippingProvider/UPS.php:192
+#: src/ShippingProvider/UPS.php:237
+#: src/ShippingProvider/UPS.php:269
 msgctxt "ups"
 msgid "UPS Worldwide Saver"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:197
+#: src/ShippingProvider/UPS.php:196
 msgctxt "ups"
 msgid "UPS 2nd Day Air"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:198
+#: src/ShippingProvider/UPS.php:197
 msgctxt "ups"
 msgid "UPS 2nd Day Air A.M."
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:199
-#: src/ShippingProvider/UPS.php:228
+#: src/ShippingProvider/UPS.php:198
+#: src/ShippingProvider/UPS.php:227
 msgctxt "ups"
 msgid "UPS 3 Day Select"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:200
+#: src/ShippingProvider/UPS.php:199
 msgctxt "ups"
 msgid "UPS Ground"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:201
+#: src/ShippingProvider/UPS.php:200
 msgctxt "ups"
 msgid "UPS Next Day Air"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:202
+#: src/ShippingProvider/UPS.php:201
 msgctxt "ups"
 msgid "UPS Next Day Air Early"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:203
+#: src/ShippingProvider/UPS.php:202
 msgctxt "ups"
 msgid "UPS Next Day Air Saver"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:211
-#: src/ShippingProvider/UPS.php:235
-#: src/ShippingProvider/UPS.php:248
+#: src/ShippingProvider/UPS.php:210
+#: src/ShippingProvider/UPS.php:234
+#: src/ShippingProvider/UPS.php:247
 msgctxt "ups"
 msgid "UPS Expedited"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:212
-#: src/ShippingProvider/UPS.php:219
-#: src/ShippingProvider/UPS.php:251
+#: src/ShippingProvider/UPS.php:211
+#: src/ShippingProvider/UPS.php:218
+#: src/ShippingProvider/UPS.php:250
 msgctxt "ups"
 msgid "UPS Express Saver"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:213
-#: src/ShippingProvider/UPS.php:242
-#: src/ShippingProvider/UPS.php:255
+#: src/ShippingProvider/UPS.php:212
+#: src/ShippingProvider/UPS.php:241
+#: src/ShippingProvider/UPS.php:254
 msgctxt "ups"
 msgid "UPS Access Point Economy"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:214
-#: src/ShippingProvider/UPS.php:236
-#: src/ShippingProvider/UPS.php:249
-#: src/ShippingProvider/UPS.php:267
+#: src/ShippingProvider/UPS.php:213
+#: src/ShippingProvider/UPS.php:235
+#: src/ShippingProvider/UPS.php:248
+#: src/ShippingProvider/UPS.php:266
 msgctxt "ups"
 msgid "UPS Express"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:215
+#: src/ShippingProvider/UPS.php:214
 msgctxt "ups"
 msgid "UPS Express Early"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:250
+#: src/ShippingProvider/UPS.php:249
 msgctxt "ups"
 msgid "UPS Express Plus"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:256
+#: src/ShippingProvider/UPS.php:255
 msgctxt "ups"
 msgid "UPS Today Dedicated Courrier"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:257
+#: src/ShippingProvider/UPS.php:256
 msgctxt "ups"
 msgid "UPS Today Express"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:258
+#: src/ShippingProvider/UPS.php:257
 msgctxt "ups"
 msgid "UPS Today Express Saver"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:259
+#: src/ShippingProvider/UPS.php:258
 msgctxt "ups"
 msgid "UPS Today Standard"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:262
+#: src/ShippingProvider/UPS.php:261
 msgctxt "ups"
 msgid "UPS Express 12:00"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:340
+#: src/ShippingProvider/UPS.php:339
 msgctxt "ups"
 msgid "Account number"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:348
+#: src/ShippingProvider/UPS.php:347
 msgctxt "ups"
 msgid "Sandbox mode"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:349
+#: src/ShippingProvider/UPS.php:348
 msgctxt "ups"
 msgid "Activate Sandbox mode for testing purposes."
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:361
+#: src/ShippingProvider/UPS.php:360
 msgctxt "ups"
 msgid "OAuth"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:373
+#: src/ShippingProvider/UPS.php:372
 msgctxt "ups"
 msgid "Client ID"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:377
+#: src/ShippingProvider/UPS.php:376
 msgctxt "ups"
 msgid "You'll need to <a href=\"%s\">register an app</a> within the UPS Developer Portal to retrieve your Client ID and Secret and connect with the API."
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:385
+#: src/ShippingProvider/UPS.php:384
 msgctxt "ups"
 msgid "Client Secret"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:412
+#: src/ShippingProvider/UPS.php:411
 msgctxt "ups"
 msgid "Tracking"
 msgstr ""
 
-#: src/ShippingProvider/UPS.php:500
-#: src/ShippingProvider/UPS.php:542
+#: src/ShippingProvider/UPS.php:499
+#: src/ShippingProvider/UPS.php:541
 msgctxt "ups"
 msgid "Incoterms"
 msgstr ""
