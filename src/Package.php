@@ -219,42 +219,7 @@ class Package {
 		return $is_sandbox;
 	}
 
-	public static function enable_logging() {
-		return ( defined( 'WC_STC_UPS_LOG_ENABLE' ) && WC_STC_UPS_LOG_ENABLE ) || self::is_sandbox_mode();
-	}
-
-	private static function define_constant( $name, $value ) {
-		if ( ! defined( $name ) ) {
-			define( $name, $value );
-		}
-	}
-
 	public static function log( $message, $type = 'info' ) {
-		$logger         = wc_get_logger();
-		$enable_logging = self::enable_logging() ? true : false;
-
-		if ( ! $logger ) {
-			return false;
-		}
-
-		/**
-		 * Filter that allows adjusting whether to enable or disable
-		 * logging for the DPD package (e.g. API requests).
-		 *
-		 * @param boolean $enable_logging True if logging should be enabled. False otherwise.
-		 *
-		 * @package Vendidero/Germanized/DPD
-		 */
-		if ( ! apply_filters( 'shiptastic_ups_enable_logging', $enable_logging ) ) {
-			return false;
-		}
-
-		if ( ! is_callable( array( $logger, $type ) ) ) {
-			$type = 'info';
-		}
-
-		$logger->{$type}( $message, array( 'source' => 'shiptastic-integration-for-ups' ) );
-
-		return true;
+		\Vendidero\Shiptastic\Package::log( $message, $type, 'ups' );
 	}
 }
