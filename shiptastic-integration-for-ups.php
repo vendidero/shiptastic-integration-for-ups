@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: Shiptastic integration for UPS
- * Plugin URI: https://vendidero.com/doc/shiptastic/ups
+ * Plugin URI: https://vendidero.com/doc/shiptastic/integrate-with-ups
  * Description: Seamlessly integrate UPS with Shiptastic and create labels from within your admin dashboard.
  * Author: vendidero
  * Author URI: https://vendidero.com
