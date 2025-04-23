@@ -364,7 +364,7 @@ class Api extends REST {
 					foreach ( $notification_codes as $notification_code ) {
 						$service_data[ $service_name ][] = array(
 							'NotificationCode' => $notification_code,
-							'EMail'            => array( 'EMailAddress' => array( $label->get_service_prop( 'customerAlertService', 'email' ) ) ),
+							'EMail'            => array( 'EMailAddress' => array( $label->get_service_prop( 'Notification', 'email' ) ) ),
 							'Locale'           => array(
 								'Language' => strtoupper( $language_details['language'] ),
 								'Dialect'  => strtoupper( $language_details['dialect'] ),
@@ -431,9 +431,9 @@ class Api extends REST {
 			$ship_to['ResidentialAddressIndicator'] = 'yes';
 		}
 
-		if ( $phone_is_required || ( apply_filters( 'shiptastic_ups_label_api_transmit_customer_phone', false, $label ) && $shipment->get_phone() ) ) {
+		if ( $phone_is_required || ( apply_filters( 'shiptastic_ups_label_api_transmit_customer_phone', false, $label ) ) ) {
 			$ship_to['Phone'] = array(
-				'Number' => $this->limit_length( $this->format_phone_number( $shipment->get_phone() ), 15 ),
+				'Number' => $this->limit_length( $this->format_phone_number( $shipment->get_phone() ? $shipment->get_phone() : apply_filters( 'shiptastic_ups_label_api_default_phone_if_missing', 0, $label ) ), 15 ),
 			);
 		}
 
