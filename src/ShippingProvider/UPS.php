@@ -652,11 +652,38 @@ class UPS extends Auto {
 	}
 
 	public function supports_remote_shipment_status( $type ) {
-		if ( 'push' === $type ) {
+		if ( 'push' === $type && Package::use_custom_api() ) {
+			return true;
+		} elseif ( 'pull' === $type ) {
 			return true;
 		}
 
 		return false;
+	}
+
+	public function get_number_of_shipments_per_status_check( $type ) {
+		return 1;
+	}
+
+	/**
+	 * @param Shipment[] $shipments
+	 *
+	 * @return ShipmentStatus[]
+	 */
+	public function get_remote_status_for_shipments( $shipments ) {
+		$status = array();
+
+		if ( $api = Package::get_api() ) {
+			foreach ( $shipments as $shipment ) {
+				$response = $api->track( $shipment );
+
+				if ( ! is_wp_error( $response ) ) {
+					$status[ $shipment->get_tracking_id() ] = $response;
+				}
+			}
+		}
+
+		return $status;
 	}
 
 	public function subscribe_to_shipment_status_events( $shipments ) {

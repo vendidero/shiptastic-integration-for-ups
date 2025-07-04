@@ -9,6 +9,7 @@ use Vendidero\Shiptastic\ImageToPDF;
 use Vendidero\Shiptastic\PDFMerger;
 use Vendidero\Shiptastic\ShipmentError;
 use Vendidero\Shiptastic\Tracking\Helper;
+use Vendidero\Shiptastic\Tracking\ShipmentStatus;
 use Vendidero\Shiptastic\UPS\Label\Retoure;
 use Vendidero\Shiptastic\UPS\Label\Simple;
 use Vendidero\Shiptastic\UPS\Package;
@@ -234,6 +235,110 @@ class Api extends REST {
 	}
 
 	/**
+	 * @param Shipment $shipment
+	 *
+	 * @return ShipmentStatus|ShipmentError
+	 */
+	public function track( $shipment ) {
+		$tracking_number = $shipment->get_tracking_id();
+
+		if ( ! empty( $tracking_number ) ) {
+			$query = array(
+				'locale'           => $this->get_locale( \Vendidero\Shiptastic\Package::get_base_country() ),
+				'returnSignature'  => false, // Indicator requesting that the delivery signature image
+				'returnMilestones' => false,
+				'returnPOD'        => false, // Proof of delivery
+			);
+
+			$response = $this->get( 'track/v1/details/' . $tracking_number, $query );
+
+			if ( ! $response->is_error() ) {
+				$body            = $response->get_body();
+				$track_shipments = isset( $body['trackResponse']['shipment'] ) ? $body['trackResponse']['shipment'] : array();
+
+				foreach ( $track_shipments as $remote_shipment ) {
+					$package = isset( $remote_shipment['package'][0] ) ? $remote_shipment['package'][0] : array();
+					$package = wp_parse_args(
+						$package,
+						array(
+							'trackingNumber'  => '',
+							'deliveryDate'    => array(),
+							'activity'        => array(),
+							'currentStatus'   => array(),
+							'referenceNumber' => array(),
+						)
+					);
+
+					$current_status = wp_parse_args(
+						$package['currentStatus'],
+						array(
+							'code'                      => '',
+							'description'               => '',
+							'simplifiedTextDescription' => '',
+						)
+					);
+
+					$latest_activity = wp_parse_args(
+						isset( $package['activity'][0] ) ? $package['activity'][0] : array(),
+						array(
+							'status'    => array(),
+							'date'      => '',
+							'time'      => '',
+							'gmtDate'   => '',
+							'gmtTime'   => '',
+							'gmtOffset' => '',
+						)
+					);
+
+					if ( ! empty( $current_status['code'] ) ) {
+						$status_code  = absint( $current_status['code'] );
+						$last_updated = null;
+						$delivered_at = null;
+						$is_delivered = in_array( $status_code, array( 11 ), true );
+
+						if ( ! empty( $latest_activity['gmtDate'] ) ) {
+							$gmt_activity_date = $latest_activity['gmtDate'] . $latest_activity['gmtTime'];
+
+							if ( ! empty( $gmt_activity_date ) ) {
+								try {
+									$last_updated = new \WC_DateTime( $gmt_activity_date );
+									$last_updated->setTimezone( new \DateTimeZone( 'UTC' ) );
+								} catch ( \Exception $e ) {
+									$last_updated = null;
+								}
+							}
+						}
+
+						if ( $is_delivered ) {
+							$delivered_at = clone $last_updated;
+						}
+
+						$status = new ShipmentStatus(
+							$shipment,
+							array(
+								'status'             => $status_code,
+								'status_description' => wc_clean( $current_status['description'] ),
+								'is_delivered'       => $is_delivered,
+								'is_in_transit'      => ! in_array( $status_code, array( 0, 3 ), true ),
+								'last_updated'       => $last_updated,
+								'delivered_at'       => $delivered_at,
+							)
+						);
+
+						return $status;
+					}
+				}
+			} else {
+				return $response->get_error();
+			}
+		}
+
+		return new ShipmentError( 'shipment_not_found', 'Could not retrieve remote shipment status.' );
+	}
+
+	/**
+	 * @see https://developer.ups.com/api/reference/trackalertenhanced/product-info?loc=en_US
+	 *
 	 * @param Shipment[] $shipments
 	 *
 	 * @return boolean
@@ -260,7 +365,7 @@ class Api extends REST {
 				),
 			);
 
-			$response = $this->post( 'track/' . $this->get_api_version() . '/subscription/standard/package', $request );
+			$response = $this->post( 'track/v1/subscription/standard/package', $request );
 
 			if ( ! $response->is_error() ) {
 				$result = true;
