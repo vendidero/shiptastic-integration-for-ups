@@ -8,6 +8,7 @@ namespace Vendidero\Shiptastic\UPS\ShippingProvider;
 
 use Vendidero\Shiptastic\Labels\ConfigurationSet;
 use Vendidero\Shiptastic\PickupDelivery;
+use Vendidero\Shiptastic\Tracking\ShipmentStatus;
 use Vendidero\Shiptastic\UPS\Package;
 use Vendidero\Shiptastic\Shipment;
 use Vendidero\Shiptastic\ShippingProvider\Auto;
@@ -404,17 +405,6 @@ class UPS extends Auto {
 			)
 		);
 
-		$settings = array_merge(
-			$settings,
-			array(
-				array(
-					'title' => _x( 'Tracking', 'ups', 'shiptastic-integration-for-ups' ),
-					'type'  => 'title',
-					'id'    => 'tracking_options',
-				),
-			)
-		);
-
 		$general_settings = parent::get_general_settings();
 
 		return array_merge( $settings, $general_settings );
@@ -659,5 +649,92 @@ class UPS extends Auto {
 		}
 
 		return $locations;
+	}
+
+	public function supports_remote_shipment_status( $type ) {
+		if ( 'push' === $type ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	public function subscribe_to_shipment_status_events( $shipments ) {
+		if ( $api = Package::get_api() ) {
+			$api->subscribe_to_tracking( $shipments );
+		}
+	}
+
+	/**
+	 * @param \WP_REST_Request $request
+	 *
+	 * @return \WP_Error|\WP_REST_Response|ShipmentStatus
+	 */
+	public function handle_remote_shipment_status_update( $request ) {
+		$secret = base64_decode( wc_clean( $request->get_header( 'credential' ) ) ); // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_decode
+		$body   = $request->get_json_params();
+
+		if ( ! empty( $body['trackingNumber'] ) && ! empty( $secret ) ) {
+			$body = wp_parse_args(
+				$body,
+				array(
+					'activityStatus'     => array(),
+					'gmtActivityDate'    => '',
+					'actualDeliveryDate' => '',
+					'gmtOffset'          => 0,
+				)
+			);
+
+			$tracking_number = wc_clean( $body['trackingNumber'] );
+
+			if ( $shipment = wc_stc_get_shipment_by_tracking_id( $tracking_number ) ) {
+				if ( $shipment->get_tracking_secret() === $secret ) {
+					$status_type          = wc_clean( $body['activityStatus']['type'] );
+					$manifest_code        = wc_clean( $body['activityStatus']['code'] );
+					$status_desc_code     = absint( wc_clean( $body['activityStatus']['descriptionCode'] ) );
+					$status_description   = wc_clean( $body['activityStatus']['description'] );
+					$gmt_activity_date    = wc_clean( ! empty( $body['gmtActivityDate'] ) ? $body['gmtActivityDate'] : '' );
+					$actual_delivery_date = wc_clean( ! empty( $body['actualDeliveryDate'] ) ? $body['actualDeliveryDate'] : '' ) . wc_clean( ! empty( $body['actualDeliveryTime'] ) ? $body['actualDeliveryTime'] : '' );
+					$gmt_offset           = (int) wc_clean( ! empty( $body['gmtOffset'] ) ? $body['gmtOffset'] : 0 );
+					$status_datetime      = null;
+					$delivered_at         = null;
+
+					if ( ! empty( $gmt_activity_date ) ) {
+						try {
+							$status_datetime = new \WC_DateTime( $gmt_activity_date );
+							$status_datetime->setTimezone( new \DateTimeZone( 'UTC' ) );
+						} catch ( \Exception $e ) {
+							$status_datetime = null;
+						}
+					}
+
+					if ( ! empty( $actual_delivery_date ) ) {
+						$actual_delivery_date = $actual_delivery_date . ' ' . ( $gmt_offset >= 0 ? '+' . $gmt_offset : $gmt_offset );
+
+						try {
+							$delivered_at = new \WC_DateTime( $actual_delivery_date );
+						} catch ( \Exception $e ) {
+							$delivered_at = null;
+						}
+					}
+
+					$status = new ShipmentStatus(
+						$shipment,
+						array(
+							'status'             => $status_desc_code,
+							'status_description' => $status_description,
+							'is_delivered'       => in_array( $status_desc_code, array( 11 ), true ),
+							'is_in_transit'      => ! in_array( $status_desc_code, array( 0, 3 ), true ),
+							'last_updated'       => $status_datetime,
+							'delivered_at'       => $delivered_at,
+						)
+					);
+
+					return $status;
+				}
+			}
+		}
+
+		return new \WP_Error( 'unauthenticated', '', array( 'status' => 401 ) );
 	}
 }

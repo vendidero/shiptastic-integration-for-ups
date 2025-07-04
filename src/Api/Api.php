@@ -8,6 +8,7 @@ use Vendidero\Shiptastic\API\REST;
 use Vendidero\Shiptastic\ImageToPDF;
 use Vendidero\Shiptastic\PDFMerger;
 use Vendidero\Shiptastic\ShipmentError;
+use Vendidero\Shiptastic\Tracking\Helper;
 use Vendidero\Shiptastic\UPS\Label\Retoure;
 use Vendidero\Shiptastic\UPS\Label\Simple;
 use Vendidero\Shiptastic\UPS\Package;
@@ -230,6 +231,43 @@ class Api extends REST {
 		}
 
 		return $location;
+	}
+
+	/**
+	 * @param Shipment[] $shipments
+	 *
+	 * @return boolean
+	 */
+	public function subscribe_to_tracking( $shipments ) {
+		$result = false;
+
+		foreach ( $shipments as $shipment ) {
+			if ( ! $shipment->get_tracking_secret() ) {
+				$shipment->set_tracking_secret( wp_generate_password( 25, false ) );
+				$shipment->save();
+			}
+
+			$request = array(
+				'locale'             => 'en_US',
+				'countryCode'        => \Vendidero\Shiptastic\Package::get_base_country(),
+				'trackingNumberList' => array(
+					$shipment->get_tracking_id(),
+				),
+				'destination'        => array(
+					'url'            => Helper::get_tracking_callback_url( 'ups' ),
+					'credentialType' => 'Bearer',
+					'credential'     => base64_encode( $shipment->get_tracking_secret() ), // phpcs:ignore WordPress.PHP.DiscouragedPHPFunctions.obfuscation_base64_encode
+				),
+			);
+
+			$response = $this->post( 'track/' . $this->get_api_version() . '/subscription/standard/package', $request );
+
+			if ( ! $response->is_error() ) {
+				$result = true;
+			}
+		}
+
+		return $result;
 	}
 
 	protected function get_language_details( $country ) {
