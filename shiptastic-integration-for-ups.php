@@ -5,7 +5,7 @@
  * Description: Seamlessly integrate UPS with Shiptastic and create labels from within your admin dashboard.
  * Author: vendidero
  * Author URI: https://vendidero.com
- * Version: 1.0.1
+ * Version: 1.1.0
  * Requires PHP: 7.0
  * License: GPLv3
  * Requires Plugins: shiptastic-for-woocommerce
