@@ -32,7 +32,7 @@ class UPS extends Auto {
 	}
 
 	public function get_default_tracking_url_placeholder() {
-		return 'https://wwwapps.ups.com/tracking/tracking.cgi?tracknum={tracking_id}&loc=de_DE';
+		return 'https://wwwapps.ups.com/tracking/tracking.cgi?tracknum={tracking_id}';
 	}
 
 	public function is_sandbox() {
