@@ -706,6 +706,9 @@ class Api extends REST {
 					'NumOfPiecesInShipment'  => $shipment->get_item_count(),
 					'ShipmentServiceOptions' => $service_data,
 					'ReferenceNumber'        => $api_references,
+					'ShipmentRatingOptions'  => array(
+						'NegotiatedRatesIndicator' => apply_filters( 'shiptastic_ups_label_api_use_negotiated_rates', true, $label ),
+					),
 					'Package'                => array(
 						// Detailed item description
 						'Description'   => $this->limit_length( $customs_data['export_type_description'], 35 ),
@@ -815,6 +818,27 @@ class Api extends REST {
 				$error->add( 'error', _x( 'There was an unknown error calling the UPS API.', 'ups', 'shiptastic-integration-for-ups' ) );
 
 				return $error;
+			}
+
+			if ( ! empty( $parcel_data['Response']['Alert'] ) ) {
+				foreach ( (array) $parcel_data['Response']['Alert'] as $warning ) {
+					$warning = wp_parse_args(
+						$warning,
+						array(
+							'Code'        => 0,
+							'Description' => '',
+						)
+					);
+
+					/**
+					 * Skip "not qualified to receive negotiated rates" warning
+					 */
+					if ( 120900 === (int) $warning['Code'] ) {
+						continue;
+					}
+
+					$error->add_soft_error( $warning['Code'], $warning['Description'] );
+				}
 			}
 
 			$shipment_references = $parcel_data['ShipmentResults'];
