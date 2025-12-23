@@ -138,27 +138,6 @@ class UPS extends Auto {
 			);
 		}
 
-		if ( 'shipping_provider' === $configuration_set->get_setting_type() ) {
-			if ( 'int' === $configuration_set->get_zone() ) {
-				$settings = array_merge(
-					$settings,
-					array(
-						array(
-							'title'    => _x( 'Default Incoterms', 'ups', 'shiptastic-integration-for-ups' ),
-							'type'     => 'select',
-							'default'  => 'DDP',
-							'id'       => 'label_default_incoterms',
-							'value'    => $this->get_setting( 'label_default_incoterms', 'DDP' ),
-							'desc'     => _x( 'Please select a default incoterms option.', 'ups', 'shiptastic-integration-for-ups' ),
-							'desc_tip' => true,
-							'options'  => $this->get_available_incoterms(),
-							'class'    => 'wc-enhanced-select',
-						),
-					)
-				);
-			}
-		}
-
 		return $settings;
 	}
 
@@ -410,6 +389,10 @@ class UPS extends Auto {
 		return array_merge( $settings, $general_settings );
 	}
 
+	public function get_default_label_incoterms() {
+		return 'DDP';
+	}
+
 	/**
 	 * @param Shipment $shipment
 	 *
@@ -460,43 +443,11 @@ class UPS extends Auto {
 			)
 		);
 
-		if ( $shipment->is_shipping_international() ) {
-			$defaults['incoterms'] = $this->get_incoterms( $shipment );
-		}
-
 		if ( 'return' === $shipment->get_type() ) {
 			$defaults['return_service'] = $this->get_default_return_label_service( $shipment );
 		}
 
 		return $defaults;
-	}
-
-	/**
-	 * @param \Vendidero\Shiptastic\Shipment $shipment
-	 *
-	 * @return array
-	 */
-	protected function get_simple_label_fields( $shipment ) {
-		$settings     = parent::get_simple_label_fields( $shipment );
-		$default_args = $this->get_default_label_props( $shipment );
-
-		if ( $shipment->is_shipping_international() ) {
-			$settings = array_merge(
-				$settings,
-				array(
-					array(
-						'id'          => 'incoterms',
-						'label'       => _x( 'Incoterms', 'ups', 'shiptastic-integration-for-ups' ),
-						'description' => '',
-						'value'       => isset( $default_args['incoterms'] ) ? $default_args['incoterms'] : '',
-						'options'     => $this->get_available_incoterms(),
-						'type'        => 'select',
-					),
-				)
-			);
-		}
-
-		return $settings;
 	}
 
 	/**
@@ -521,22 +472,6 @@ class UPS extends Auto {
 				),
 			)
 		);
-
-		if ( $shipment->is_shipping_international() ) {
-			$settings = array_merge(
-				$settings,
-				array(
-					array(
-						'id'          => 'incoterms',
-						'label'       => _x( 'Incoterms', 'ups', 'shiptastic-integration-for-ups' ),
-						'description' => '',
-						'value'       => isset( $default_args['incoterms'] ) ? $default_args['incoterms'] : '',
-						'options'     => $this->get_available_incoterms(),
-						'type'        => 'select',
-					),
-				)
-			);
-		}
 
 		return $settings;
 	}
