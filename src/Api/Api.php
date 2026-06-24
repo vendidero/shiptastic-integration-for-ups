@@ -610,7 +610,7 @@ class Api extends REST {
 				);
 			}
 
-			$default_terms  = $label->get_incoterms();
+			$default_terms  = is_callable( array( $label, 'get_incoterms' ) ) ? $label->get_incoterms() : $provider->get_default_incoterms( $shipment );
 			$default_reason = ! empty( $customs_data['export_reason'] ) ? strtoupper( $customs_data['export_reason'] ) : 'SALE';
 
 			$available_reasons_for_export = array(

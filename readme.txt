@@ -2,8 +2,8 @@
 Contributors: vendidero, vdwoocommercesupport
 Tags: shipping, UPS, shiptastic, woocommerce
 Requires at least: 5.4
-Tested up to: 6.8
-Stable tag: 1.1.0
+Tested up to: 7.0
+Stable tag: 1.2.0
 Requires PHP: 7.0
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -26,6 +26,11 @@ UPS labels to your shipments right from within your admin panel and allow your c
 * PHP Version 7.0 or newer
 
 == Changelog ==
+= 1.2.0 =
+* Improvement: Remove de_DE locale from default tracking link
+* Improvement: Set the NegotiatedRatesIndicator by default
+* Improvement: Remove custom incoterms select as it has been moved to core
+
 = 1.1.0 =
 * New: Support remote shipment tracking
 

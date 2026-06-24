@@ -19,7 +19,6 @@ class Retoure extends Simple implements ShipmentReturnLabel {
 	 */
 	protected $extra_data = array(
 		'return_service' => '',
-		'incoterms'      => '',
 		'form_01_path'   => '',
 	);
 

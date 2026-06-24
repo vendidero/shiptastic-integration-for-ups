@@ -18,7 +18,6 @@ class Simple extends Label {
 	 * @var array
 	 */
 	protected $extra_data = array(
-		'incoterms'    => '',
 		'form_01_path' => '',
 	);
 
@@ -36,20 +35,12 @@ class Simple extends Label {
 		return array_merge( $file_types, array( 'form_01' ) );
 	}
 
-	public function get_incoterms( $context = 'view' ) {
-		return $this->get_prop( 'incoterms', $context );
-	}
-
 	public function get_form_01_path( $context = 'view' ) {
 		return $this->get_path( $context, 'form_01' );
 	}
 
 	public function set_form_01_path( $path ) {
 		$this->set_path( $path, 'form_01' );
-	}
-
-	public function set_incoterms( $incoterms ) {
-		$this->set_prop( 'incoterms', $incoterms );
 	}
 
 	/**

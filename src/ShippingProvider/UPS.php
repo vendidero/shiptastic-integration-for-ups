@@ -394,23 +394,6 @@ class UPS extends Auto {
 	}
 
 	/**
-	 * @param Shipment $shipment
-	 *
-	 * @return string
-	 */
-	protected function get_incoterms( $shipment ) {
-		$incoterms = $this->get_setting( 'label_default_incoterms', 'DDP' );
-
-		if ( ! empty( $shipment->get_incoterms() ) ) {
-			if ( in_array( $shipment->get_incoterms(), array_keys( $this->get_available_incoterms() ), true ) ) {
-				$incoterms = $shipment->get_incoterms();
-			}
-		}
-
-		return $incoterms;
-	}
-
-	/**
 	 * @param \Vendidero\Shiptastic\Shipment $shipment
 	 */
 	public function get_default_return_label_service( $shipment ) {
