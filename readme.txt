@@ -16,6 +16,11 @@ This plugin registers UPS® as a shipping service provider for [Shiptastic](http
 WooCommerce > Settings > Shiptastic > Shipping Service Providers > UPS and connect your store to the UPS API. After that, you may conveniently create
 UPS labels to your shipments right from within your admin panel and allow your customers to choose UPS Access Point™ delivery from within your checkout.
 
+== Frequently Asked Questions ==
+
+= Where do I report security bugs found in this plugin? =
+Please report security bugs found in the source code of the Shiptastic Integration for UPS plugin through the [Patchstack Vulnerability Disclosure Program](https://patchstack.com/database/vdp/bd96dfc3-1bae-4a0a-8596-1ced3ae0ab20). The Patchstack team will assist you with verification, CVE assignment, and notify the developers of this plugin.
+
 == Installation ==
 
 = Minimal Requirements =
