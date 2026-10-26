@@ -261,11 +261,53 @@ class Api extends REST {
 					$package = wp_parse_args(
 						$package,
 						array(
-							'trackingNumber'  => '',
-							'deliveryDate'    => array(),
-							'activity'        => array(),
-							'currentStatus'   => array(),
-							'referenceNumber' => array(),
+							'trackingNumber'      => '',
+							'deliveryDate'        => array(),
+							'deliveryTime'        => array(),
+							'activity'            => array(),
+							'currentStatus'       => array(),
+							'referenceNumber'     => array(),
+							'deliveryInformation' => array(),
+						)
+					);
+
+					$estimated_delivery_date = null;
+
+					$latest_activity = wp_parse_args(
+						isset( $package['activity'][0] ) ? $package['activity'][0] : array(),
+						array(
+							'status'    => array(),
+							'location'  => array(),
+							'date'      => '',
+							'time'      => '',
+							'gmtDate'   => '',
+							'gmtTime'   => '',
+							'gmtOffset' => '',
+						)
+					);
+
+					$delivery_information = wp_parse_args(
+						$package['deliveryInformation'],
+						array(
+							'location'   => '',
+							'receivedBy' => '',
+						)
+					);
+
+					$latest_delivery_date = wp_parse_args(
+						isset( $package['deliveryDate'][0] ) ? $package['deliveryDate'][0] : array(),
+						array(
+							'type' => '',
+							'date' => '', // YYYYMMDD
+						)
+					);
+
+					$delivery_time = wp_parse_args(
+						(array) $package['deliveryTime'],
+						array(
+							'endTime'   => '', // HHMMSS
+							'startTime' => '', // HHMMSS
+							'type'      => '',
 						)
 					);
 
@@ -278,18 +320,6 @@ class Api extends REST {
 						)
 					);
 
-					$latest_activity = wp_parse_args(
-						isset( $package['activity'][0] ) ? $package['activity'][0] : array(),
-						array(
-							'status'    => array(),
-							'date'      => '',
-							'time'      => '',
-							'gmtDate'   => '',
-							'gmtTime'   => '',
-							'gmtOffset' => '',
-						)
-					);
-
 					if ( ! empty( $current_status['code'] ) ) {
 						$status_code  = absint( $current_status['code'] );
 						$last_updated = null;
@@ -297,7 +327,7 @@ class Api extends REST {
 						$is_delivered = in_array( $status_code, array( 11 ), true );
 
 						if ( ! empty( $latest_activity['gmtDate'] ) ) {
-							$gmt_activity_date = $latest_activity['gmtDate'] . $latest_activity['gmtTime'];
+							$gmt_activity_date = wc_clean( $latest_activity['gmtDate'] . $latest_activity['gmtTime'] );
 
 							if ( ! empty( $gmt_activity_date ) ) {
 								try {
@@ -309,19 +339,69 @@ class Api extends REST {
 							}
 						}
 
-						if ( $is_delivered ) {
-							$delivered_at = clone $last_updated;
+						$current_location = array();
+
+						if ( ! empty( $latest_activity['location'] ) && ! empty( $latest_activity['location']['address'] ) ) {
+							$location = wc_clean(
+								wp_parse_args(
+									(array) $latest_activity['location']['address'],
+									array(
+										'addressLine1'  => '',
+										'addressLine2'  => '',
+										'city'          => '',
+										'countryCode'   => '',
+										'postalCode'    => '',
+										'stateProvince' => '',
+									)
+								)
+							);
+
+							$current_location = array(
+								'address_1' => $location['addressLine1'],
+								'address_2' => $location['addressLine2'],
+								'city'      => $location['city'],
+								'postcode'  => $location['postalCode'],
+								'state'     => $location['stateProvince'],
+								'country'   => $location['countryCode'],
+							);
+						}
+
+						/**
+						 * The delivery date/time is returned as local time at the destination (without offset).
+						 */
+						if ( ! empty( $latest_delivery_date['date'] ) ) {
+							$time = empty( $delivery_time['endTime'] ) ? wc_clean( $delivery_time['startTime'] ) : wc_clean( $delivery_time['endTime'] );
+							$time = empty( $time ) ? '235959' : $time;
+
+							$local_delivery_date = \DateTime::createFromFormat( 'YmdHis', wc_clean( $latest_delivery_date['date'] ) . $time, $this->get_destination_timezone( $shipment, $latest_activity ) );
+
+							if ( $local_delivery_date ) {
+								$estimated_delivery_date = new \WC_DateTime( '@' . $local_delivery_date->getTimestamp() );
+								$estimated_delivery_date->setTimezone( new \DateTimeZone( 'UTC' ) );
+							}
+						}
+
+						if ( $is_delivered && ( $last_updated || $estimated_delivery_date ) ) {
+							if ( $estimated_delivery_date && 'DEL' === $delivery_time['type'] ) {
+								$delivered_at = clone $estimated_delivery_date;
+							} elseif ( $last_updated ) {
+								$delivered_at = clone $last_updated;
+							}
 						}
 
 						$status = new ShipmentStatus(
 							$shipment,
 							array(
-								'status'             => $status_code,
-								'status_description' => wc_clean( $current_status['description'] ),
-								'is_delivered'       => $is_delivered,
-								'is_in_transit'      => ! in_array( $status_code, array( 0, 3 ), true ),
-								'last_updated'       => $last_updated,
-								'delivered_at'       => $delivered_at,
+								'status'                => $status_code,
+								'status_description'    => wc_clean( $current_status['description'] ),
+								'is_delivered'          => $is_delivered,
+								'is_in_transit'         => ! in_array( $status_code, array( 0, 3 ), true ),
+								'last_updated'          => $last_updated,
+								'delivered_at'          => $delivered_at,
+								'estimated_delivery_at' => $estimated_delivery_date,
+								'delivery_located_at'   => ! empty( $delivery_information['location'] ) ? wc_clean( $delivery_information['location'] ) : '',
+								'delivery_received_by'  => ! empty( $delivery_information['receivedBy'] ) ? wc_clean( $delivery_information['receivedBy'] ) : '',
+								'current_location'      => $current_location,
 							)
 						);
 
@@ -334,6 +414,58 @@ class Api extends REST {
 		}
 
 		return new ShipmentError( 'shipment_not_found', 'Could not retrieve remote shipment status.' );
+	}
+
+	/**
+	 * UPS returns delivery dates as local time at the destination without an offset.
+	 * Use the offset of the latest tracking activity by default, otherwise fall back
+	 * to the destination country's timezone (in case it is unambiguous) or the site's timezone.
+	 *
+	 * @param Shipment $shipment
+	 * @param array $latest_activity
+	 *
+	 * @return \DateTimeZone
+	 */
+	protected function get_destination_timezone( $shipment, $latest_activity ) {
+		$timezone = null;
+
+		if ( ! empty( $latest_activity['gmtOffset'] ) ) {
+			try {
+				$timezone = new \DateTimeZone( $latest_activity['gmtOffset'] );
+			} catch ( \Exception $e ) {
+				$timezone = null;
+			}
+		}
+
+		if ( ! $timezone && $shipment->get_country() ) {
+			$zones = \DateTimeZone::listIdentifiers( \DateTimeZone::PER_COUNTRY, $shipment->get_country() );
+
+			if ( ! empty( $zones ) ) {
+				/**
+				 * Some countries contain multiple identifiers that share the same offsets (e.g. Europe/Berlin, Europe/Busingen).
+				 * Treat the country as unambiguous in case all zones share the same offset in winter and summer.
+				 */
+				$year    = gmdate( 'Y' );
+				$winter  = new \DateTime( "{$year}-01-15 12:00:00", new \DateTimeZone( 'UTC' ) );
+				$summer  = new \DateTime( "{$year}-07-15 12:00:00", new \DateTimeZone( 'UTC' ) );
+				$offsets = array();
+
+				foreach ( $zones as $zone ) {
+					$zone      = new \DateTimeZone( $zone );
+					$offsets[] = $zone->getOffset( $winter ) . '|' . $zone->getOffset( $summer );
+				}
+
+				if ( 1 === count( array_unique( $offsets ) ) ) {
+					$timezone = new \DateTimeZone( $zones[0] );
+				}
+			}
+		}
+
+		if ( ! $timezone ) {
+			$timezone = wp_timezone();
+		}
+
+		return apply_filters( 'shiptastic_ups_destination_timezone', $timezone, $shipment, $latest_activity );
 	}
 
 	/**
